@@ -1,5 +1,7 @@
 ﻿
 
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+
 Public Class GitHubCheckFrm
     ''' <summary>
     ''' This is the main form for processing through github.com repos counting
@@ -26,7 +28,7 @@ Public Class GitHubCheckFrm
         Else
             ConnectionLbl.Text = "Using Stored GitHub PAT"
         End If
-
+        RepoListView.ListViewItemSorter = New ListViewIntegerDescSorter()
 
     End Sub
 

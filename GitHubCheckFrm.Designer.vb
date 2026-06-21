@@ -52,6 +52,7 @@ Partial Class GitHubCheckFrm
         ' 
         ' RepoListView
         ' 
+        RepoListView.BackColor = SystemColors.Window
         RepoListView.Columns.AddRange(New ColumnHeader() {ColumnHeader1, ColumnHeader2, ColumnHeader3})
         RepoListView.FullRowSelect = True
         RepoListView.GridLines = True

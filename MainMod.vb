@@ -20,6 +20,7 @@ Module MainMod
         Dim githubToken As String = GitHubPAT
         Dim client As New GitHubClient(New ProductHeaderValue("DependabotChecker"))
         client.Credentials = New Credentials(githubToken)
+        Dim TotalopenAlerts As Integer
 
         Try
 
@@ -45,6 +46,7 @@ Module MainMod
                 ' Get the last update date
                 Dim lastUpdated As String = repo.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")
                 Dim alertCountDisplay As String = ""
+                Dim openAlerts As Integer = 0
 
                 Try
 
@@ -54,8 +56,9 @@ Module MainMod
 
                     If response.Body IsNot Nothing Then
                         ' Count how many alerts have a state of "open"
-                        Dim openAlerts = response.Body.Where(Function(a) a.State = "open").Count()
+                        openAlerts = response.Body.Where(Function(a) a.State = "open").Count()
                         alertCountDisplay = openAlerts.ToString()
+                        TotalopenAlerts += openAlerts
                     End If
 
                 Catch ex As ApiException When ex.StatusCode = System.Net.HttpStatusCode.NotFound
@@ -66,13 +69,20 @@ Module MainMod
                 End Try
 
                 Dim item As New ListViewItem(repoName)
+                If openAlerts > 0 Then
+                    item.BackColor = Color.LightPink
+                End If
                 item.SubItems.Add(alertCountDisplay)
                 item.SubItems.Add(lastUpdated)
+
+
                 ReqForm.RepoListView.Items.Add(item)
 
 
             Next
-
+            If TotalopenAlerts > 0 Then
+                ReqForm.RepoListView.Sort()
+            End If
         Catch ex As Exception
             MessageBox.Show($"Error: {ex.ToString()}")
         End Try
